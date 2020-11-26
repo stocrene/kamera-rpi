@@ -1,3 +1,4 @@
+#Before Running you have to "sudo pigpiod"
 #imports
 import pigpio
 import time
