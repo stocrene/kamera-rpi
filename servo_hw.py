@@ -21,9 +21,9 @@ class servomotor:
 
     def goto(self, angle, speed): #goto angle with certain speed (deg/sec)
         endpos = (2 + angle/18)*10000
-        if endpos > 120000:
+        if endpos > 120000:         #if endpos > max
             endpos = 120000
-        if endpos < 20000:
+        if endpos < 20000:          #if endpos < min
             endpos = 20000
         increment = (speed/(50*18))*10000 #increment per 1/50 sec
         if self.cycle > endpos:
@@ -44,6 +44,8 @@ class servomotor:
         GPIO.stop()
         print("class cleaned")
 
+
+#initialize a servo class (12 for x-axis; 13 for y-axis)
 s1 = servomotor(12, 50)
 s1.initialize()
 
