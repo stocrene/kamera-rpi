@@ -19,6 +19,7 @@ class servomotor:
         GPIO.set_mode(self.pin_out,pigpio.ALT5)
         GPIO.hardware_PWM(self.pin_out, self.frequency, self.cycle)
 
+        #goto unglücklich gewählt 
     def goto(self, angle, speed): #goto angle with certain speed (deg/sec)
         endpos = (2 + angle/18)*10000
         if endpos > 120000:         #if endpos > max
