@@ -16,11 +16,13 @@ class servomotor:
         self.frequency = freq
 
     def initialize(self):
+        print("initialize" + str(self.pin_out))
         GPIO.set_mode(self.pin_out,pigpio.ALT5)
         GPIO.hardware_PWM(self.pin_out, self.frequency, self.cycle)
+        time.sleep(0.2)
+        GPIO.hardware_PWM(self.pin_out, self.frequency, 0)
 
-        #goto unglücklich gewählt 
-    def goto(self, angle, speed): #goto angle with certain speed (deg/sec)
+    def gotoPos(self, angle, speed): #gotoPos angle with certain speed (deg/sec)
         endpos = (2 + angle/18)*10000
         if endpos > 120000:         #if endpos > max
             endpos = 120000
@@ -33,7 +35,7 @@ class servomotor:
         while (not((self.cycle+1000 >= endpos) and (self.cycle-1000<=endpos))):
             #print("work")
             self.cycle += increment
-            GPIO.hardware_PWM(self.pin_out, self.frequency, self.cycle)
+            GPIO.hardware_PWM(self.pin_out, self.frequency, int(self.cycle))
             time.sleep(0.02)
         GPIO.hardware_PWM(self.pin_out, self.frequency, 0)
     
@@ -41,21 +43,23 @@ class servomotor:
         return (self.cycle/10000 - 2) * 18
 
     def clean(self):
+        print("clean" + self.pin_out)
         GPIO.write(self.pin_out, 0)
         GPIO.stop()
         print("class cleaned")
 
-
+"""
 #initialize a servo class (12 for x-axis; 13 for y-axis)
-s1 = servomotor(12, 50)
+s1 = servomotor(13, 50)
 s1.initialize()
 
 try:
     while True:
         angle = float(input('Enter angle between 0 & 180:'))
         speed = float(input('Enter angular speed in deg/sec:'))
-        s1.goto(angle,speed)
+        s1.gotoPos(angle,speed)
 
 finally:
     s1.clean()
     
+"""
