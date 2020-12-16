@@ -4,6 +4,9 @@ echo ----------------------------------------
 echo ----------Installationsroutine----------
 echo ----------------------------------------
 echo 
+echo Installiere Updates
+sudo apt-get update
+sudo apt-get upgrade
 echo Installation von motion
 echo 
 #Installiere motion
