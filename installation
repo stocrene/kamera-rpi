@@ -35,19 +35,27 @@ else
 	echo Fehler: stream localhost konnte nicht gefunden werden
 fi
 
+#Unklar, ob folgende Änderungen funktionieren wegen Pfadangabe, muss erst getestet werden. 
+#if grep '^target_dir.*' /etc/motion/motion.conf
+#then
+#	sed -i 's/^target_dir.*/target_dir /home/pi/Monitor/g' /etc/motion/motion.conf
+#else
+#
+#fi
+
 
 #Set stream maxrate to 30 
-if grep '^stream_maxrate...' /etc/motion/motion.conf
+if grep '^stream_maxrate.*' /etc/motion/motion.conf
 then
-	sed -i 's/^stream_maxrate.../stream_maxrate 30/g' /etc/motion/motion.conf
+	sed -i 's/^stream_maxrate.*/stream_maxrate 30/g' /etc/motion/motion.conf
 else
 	echo stream_maxrate is different
 fi
 
 #Set framerate to 30
-if grep '^framerate...' /etc/motion/motion.conf
+if grep '^framerate.*' /etc/motion/motion.conf
 then
-	sed -i 's/^framerate.../framerate 30/g' /etc/motion/motion.conf
+	sed -i 's/^framerate.*/framerate 30/g' /etc/motion/motion.conf
 else
 	echo framerate is different
 fi
