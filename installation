@@ -1,0 +1,82 @@
+#!/bin/bash
+
+echo ----------------------------------------
+echo ----------Installationsroutine----------
+echo ----------------------------------------
+echo 
+echo Installation von motion
+echo 
+#Installiere motion
+sudo apt-get install motion -y
+echo 
+#Set deamon to on
+
+if grep 'daemon on' /etc/motion/motion.conf
+then
+	echo Setting OK
+elif grep 'daemon off' /etc/motion/motion.conf
+then
+	sed -i 's/daemon off/daemon on/g' /etc/motion/motion.conf
+else
+	echo Fehler: deamon konnte nicht gefunden werden
+fi
+
+#Set stream_localhost to off
+if grep 'stream_localhost off' /etc/motion/motion.conf
+then
+	echo Setting OK
+elif grep 'stream_localhost on' /etc/motion/motion.conf
+then
+	sed -i 's/stream_localhost on/stream_localhost off/g' /etc/motion/motion.conf
+else
+	echo Fehler: stream localhost konnte nicht gefunden werden
+fi
+
+
+#Set stream maxrate to 30 
+#---------vll. nicht direkt nach 1 suchen 
+if grep 'stream_maxrate 1' /etc/motion/motion.conf
+then
+	sed -i 's/stream_maxrate 1/stream_maxrate 30/g' /etc/motion/motion.conf
+else
+	echo stream_maxrate is different
+fi
+
+#set start_motion_daemon to yes
+if grep 'start_motion_daemon=yes' /etc/default/motion
+then
+	echo Setting OK
+elif grep 'start_motion_daemon=no' /etc/default/motion
+then
+	sed -i 's/start_motion_daemon=no/start_motion_daemon=yes/g' /etc/default/motion
+else
+	echo Fehler: stream localhost konnte nicht gefunden werden
+fi
+
+if grep 'gpu_mem=128' /boot/config.txt
+then
+	echo GPU Setting OK
+else
+	sed -i '$a gpu_mem=128' /boot/config.txt
+fi
+
+
+if grep 'start_x=1' /boot/config.txt
+then
+	echo Camera Setting OK
+elif grep 'start_x=0' /boot/config.txt
+then
+	sed -i 's/start_x=0/start_x=1/g' /boot/config.txt
+else
+	sed -i '$a start_x=1' /boot/config.txt
+fi 
+
+mkdir -p /home/pi/Monitor
+echo Pfad /home/pi/Monitor wurde erstellt
+sudo chgrp motion /home/pi/Monitor
+chmod g+rwx /home/pi/Monitor
+echo Starte motion....
+sudo service motion start
+echo ----------------------------
+echo
+echo Installationsroutine beendet
