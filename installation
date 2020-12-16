@@ -37,18 +37,17 @@ fi
 
 
 #Set stream maxrate to 30 
-#---------vll. nicht direkt nach 1 suchen 
-if grep 'stream_maxrate 1' /etc/motion/motion.conf
+if grep '^stream_maxrate...' /etc/motion/motion.conf
 then
-	sed -i 's/stream_maxrate 1/stream_maxrate 30/g' /etc/motion/motion.conf
+	sed -i 's/^stream_maxrate.../stream_maxrate 30/g' /etc/motion/motion.conf
 else
 	echo stream_maxrate is different
 fi
 
 #Set framerate to 30
-if grep 'framerate 2' /etc/motion/motion.conf
+if grep '^framerate...' /etc/motion/motion.conf
 then
-	sed -i 's/framerate 2/framerate 30/g' /etc/motion/motion.conf
+	sed -i 's/^framerate.../framerate 30/g' /etc/motion/motion.conf
 else
 	echo framerate is different
 fi
