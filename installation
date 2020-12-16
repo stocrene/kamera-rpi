@@ -45,6 +45,14 @@ else
 	echo stream_maxrate is different
 fi
 
+#Set framerate to 30
+if grep 'framerate 2' /etc/motion/motion.conf
+then
+	sed -i 's/framerate 2/framerate 30/g' /etc/motion/motion.conf
+else
+	echo framerate is different
+fi
+
 #set start_motion_daemon to yes
 if grep 'start_motion_daemon=yes' /etc/default/motion
 then
@@ -83,3 +91,5 @@ sudo service motion start
 echo ----------------------------
 echo
 echo Installationsroutine beendet
+
+reboot
