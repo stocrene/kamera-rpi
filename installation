@@ -95,6 +95,11 @@ sudo chgrp motion /home/pi/Monitor
 chmod g+rwx /home/pi/Monitor
 echo Starte motion....
 sudo service motion start
+echo Autostartdateien werden hinzugefügt 
+sed -i '$a @reboot root motion start' /etc/crontab
+sed -i '$a @reboot root pigpiod ' /etc/crontab
+#sed -i '$a @reboot root python /home/pi/Projektarbeit/git/kamea-rpi main.py ' /etc/crontab
+
 echo ----------------------------
 echo
 echo Installationsroutine beendet
