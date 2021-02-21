@@ -7,6 +7,7 @@ echo
 echo Installiere Updates
 sudo apt-get update
 sudo apt-get upgrade
+sudo apt install python3
 echo Installation von motion
 echo 
 #Installiere motion
@@ -98,7 +99,7 @@ sudo service motion start
 echo Autostartdateien werden hinzugefügt 
 sed -i '$a @reboot root motion start' /etc/crontab
 sed -i '$a @reboot root pigpiod ' /etc/crontab
-#sed -i '$a @reboot root python /home/pi/Projektarbeit/git/kamea-rpi main.py ' /etc/crontab
+#sed -i '$a @reboot root python3 /home/pi/Projekt/git/kamea-rpi/main.py ' /etc/crontab
 
 echo ----------------------------
 echo
