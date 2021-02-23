@@ -47,7 +47,7 @@ class RequestHandler(socketserver.BaseRequestHandler):
         #get motorpositions for response
         x,y = motor_table.get_positions()
         jdata =json.loads(self.data)
-        if'Request' in jdata:
+        if'REQUEST' in jdata:
             if jdata["REQUEST"] == "position": 
                 self.data = "{\"ANSWER\":position,\"x\":" + str(round(x))+ ",\"y\":"+str(round(y))+"}"
                 self.request.sendall(self.data.encode('utf-8'))     #give back an answer
