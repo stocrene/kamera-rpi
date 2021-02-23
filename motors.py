@@ -14,7 +14,7 @@ class motor_xy:
         self.y_motor = servomotor(piny, freq, 10, 90)
         self.x_motor.initialize()
         self.x_motor.initialize()
-        fd = open("position.txt", "r")
+        fd = open("/home/pi/kamera-rpi/position.txt", "r")
         if fd.mode == 'r':
             content = fd.read()
         fd.close()
@@ -82,7 +82,7 @@ class motor_xy:
         ypos = self.y_motor.getpos()
         filecontent = "{\"xpos\":" + str(round(xpos)) + ",\"ypos\":"+str(round(ypos))+"}"
 #        print(filecontent)
-        fd = open("position.txt","w+")
+        fd = open("/home/pi/kamera-rpi/position.txt","w+")
         fd.write(filecontent)
         fd.close()
         return xpos, ypos
