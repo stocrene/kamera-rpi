@@ -48,8 +48,8 @@ class RequestHandler(socketserver.BaseRequestHandler):
         x,y = motor_table.get_positions()
         jdata =json.loads(self.data)
         if'Request' in jdata:
-            if jdata["Request"] == "position": 
-                self.data = "{\"Answer\":position,\"x\":" + str(round(x))+ ",\"y\":"+str(round(y))+"}"
+            if jdata["REQUEST"] == "position": 
+                self.data = "{\"ANSWER\":position,\"x\":" + str(round(x))+ ",\"y\":"+str(round(y))+"}"
                 self.request.sendall(self.data.encode('utf-8'))     #give back an answer
             else:
                 self.request.sendall("Did not understand Request".encode('utf-8')) #return an error message  
