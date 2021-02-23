@@ -49,7 +49,7 @@ class RequestHandler(socketserver.BaseRequestHandler):
         jdata =json.loads(self.data)
         if'REQUEST' in jdata:
             if jdata["REQUEST"] == "position": 
-                self.data = "{\"ANSWER\":position,\"X\":" + str(round(x))+ ",\"X\":"+str(round(y))+"}"
+                self.data = "{\"ANSWER\":position,\"X\":" + str(round(x))+ ",\"Y\":"+str(round(y))+"}"
                 self.request.sendall(self.data.encode('utf-8'))     #give back an answer
             else:
                 self.request.sendall("Did not understand Request".encode('utf-8')) #return an error message  
