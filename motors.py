@@ -10,8 +10,8 @@ class motor_xy:
 
     # initialize the needed motors
     def __init__ (self, pinx, piny, freq):
-        self.x_motor = servomotor(pinx, freq, 10, 180)
-        self.y_motor = servomotor(piny, freq, 10, 90)
+        self.x_motor = servomotor(pinx, freq, 10, 180, True, True)
+        self.y_motor = servomotor(piny, freq, 10, 90, True, False)
         self.x_motor.initialize()
         self.x_motor.initialize()
         fd = open("/home/pi/kamera-rpi/position.txt", "r")
@@ -30,6 +30,7 @@ class motor_xy:
     def catchOldPosition(self, x, y):
         self.x_motor.setCycle(-x+180)
         self.y_motor.setCycle(y)
+        
     # send both motors to a certain position with fixed speed
     def gotoposition(self, x, y):
         print("gotoposition "+ str(-x+180)+" "+str(y))
@@ -85,4 +86,4 @@ class motor_xy:
         fd = open("/home/pi/kamera-rpi/position.txt","w+")
         fd.write(filecontent)
         fd.close()
-        return xpos, ypos
+        return round(xpos), round(ypos)

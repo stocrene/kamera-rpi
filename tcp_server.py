@@ -19,6 +19,7 @@ class CommunicationHandler(socketserver.BaseRequestHandler):
         self.data = self.request.recv(1024).strip() #get data
         self.data = str(self.data, 'utf-8')         #convert data
         #get motorpositions for response
+        print("CommunicationHandler received:" + self.data)
         x,y = motor_table.get_positions()
         #load data as json package
         essential_load =["X", "Y", "pos"] 
@@ -33,8 +34,9 @@ class CommunicationHandler(socketserver.BaseRequestHandler):
                 motor_table.gotoposition(jdata["X"], jdata["Y"])  
             else:                       #or a speed package
                 motor_table.set_speeds(jdata["X"], jdata["Y"])
-            self.data = "{\"X\"=" + str(x)+ ",\"Y\":"+str(y)+"}"
+            self.data = "{\"X\":" + str(x)+ ",\"Y\":"+str(y)+"}"
             self.request.sendall(self.data.encode('utf-8')) #return the current position
+            print("Replied with:"+self.data)
         else:
             print(error_str)
             self.request.sendall(error_str.encode('utf8'))

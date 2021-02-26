@@ -14,30 +14,64 @@ class servomotor:
     cycle = 120000
     minimum = 0
     maximum = 0
-    
+    minimum_deg = 0
+    maximum_deg = 0
+    interp_up = False
+    interp_down = False
+    slope = 0
+    axis = 0
+        
+    # calculate the slope and axis for conversion
+    def calcSlope(self):
+        if(self.interp_down):
+            x1 = 0
+        else:
+            x1 = self.minimum_deg
+        if(self.interp_up):
+            x2 = 180
+        else:
+            x2 = self.maximum_deg
+        y1 = self.minimum
+        y2 = self.maximum
+        self.slope = (y2 -y1) / (x2 - x1)
+        self.axis = y1 - (self.slope * x1)
+        print("slope = " + str(self.slope) + " axis = " + str(self.axis) + " x1=" + str(x1) + " x2=" + str(x2) + " y1=" + str(y1) + " y2=" + str(y2))
+
     # create the motor
-    def __init__(self, pin, freq, mini, maxi):
+    def __init__(self, pin, freq, mini, maxi, interpoliere_unten, interpoliere_oben):
         self.pin_out = pin
         self.frequency = freq
         self.maximum = (maxi/18+2)*10000
         self.minimum = (mini/18+2)*10000
+        self.maximum_deg = maxi
+        self.minimum_deg = mini
+        self.interp_down = interpoliere_unten
+        self.interp_up = interpoliere_oben
 
         if self.maximum < self.minimum: #if values are in false order just rearrange them 
             helper = self.maximum
             self.maximum = self.minimum
             self.minimum = helper
+            helper = self.maximum_deg
+            self.maximum_deg = self.minimum_deg
+            self.minimum_deg = helper
 
         if self.maximum > 120000:
             self.maximum = 120000
+            self.maximum_deg = 180
 
         elif self.maximum < 20000:
             self.maximum = 20000
+            self.maximum_deg = 0
 
         if self.minimum > 120000:
             self.minimum = 120000
+            self.minimum_deg = 180
 
         elif self.minimum < 20000:
-            self.minimum = 20000        
+            self.minimum = 20000
+            self.minimum_deg = 0   
+        self.calcSlope()     
 
     # initialize the PWM Controlling
     def initialize(self):
@@ -70,7 +104,7 @@ class servomotor:
     # go to a certain position
     def gotoPos(self, angle, speed): #gotoPos angle with certain speed (deg/sec)
         print("gotoPos " + str(angle) + " " + str(speed))
-        endpos = (2 + angle/18)*10000
+        endpos = self.slope * angle + self.axis
         if endpos > self.maximum:         #if endpos > max
             endpos = self.maximum
         if endpos < self.minimum:          #if endpos < min
@@ -86,10 +120,11 @@ class servomotor:
             time.sleep(0.02)
         self.stopMotion()
         print("motor" + str(self.pin_out) + " got to position" + str(self.cycle))
-    
+
+
     # return position in degreees
     def getpos(self):
-        return (self.cycle/10000 - 2) * 18
+        return (self.cycle - self.axis) / self.slope
 
     #clean up at program end
     def clean(self):
