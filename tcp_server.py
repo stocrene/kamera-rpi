@@ -36,14 +36,14 @@ class CommunicationHandler(socketserver.BaseRequestHandler):
                 motor_table.set_speeds(jdata["X"], jdata["Y"])
             self.data = "{\"X\":" + str(x)+ ",\"Y\":"+str(y)+"}"
             self.request.sendall(self.data.encode('utf-8')) #return the current position
-            print("Replied with:"+self.data)
+        #    print("Replied with:"+self.data)
         else:
             print(error_str)
             self.request.sendall(error_str.encode('utf8'))
 
 class RequestHandler(socketserver.BaseRequestHandler):
     def handle(self):
-        print("RequestHandler::handle()")
+    #    print("RequestHandler::handle()")
         self.data = self.request.recv(1024).strip() #geht data
         self.data =str(self.data, 'utf-8')          #convert data
         #get motorpositions for response

@@ -20,6 +20,8 @@ class servomotor:
     interp_down = False
     slope = 0
     axis = 0
+    run = False
+    free_for_orders = True
         
     # calculate the slope and axis for conversion
     def calcSlope(self):
@@ -83,7 +85,7 @@ class servomotor:
 
     # set the cycle time to a certain value
     def setCycle(self, value):
-        self.cycle = (value / 18 + 2)* 10000
+        self.cycle = self.slope * value + self.axis
 
     # go exactly one step with a certain angle
     def goOneStep(self, angle):
@@ -99,11 +101,13 @@ class servomotor:
 
     # stop the current motion
     def stopMotion(self):
-        GPIO.hardware_PWM(self.pin_out, self. frequency, 0)
+        GPIO.hardware_PWM(self.pin_out, self.frequency, 0)
 
     # go to a certain position
     def gotoPos(self, angle, speed): #gotoPos angle with certain speed (deg/sec)
-        print("gotoPos " + str(angle) + " " + str(speed))
+        self.run = True
+        self.free_for_orders = False
+        print("motor" + str(self.pin_out) + " gotoPos " + str(angle) + " " + str(speed))
         endpos = self.slope * angle + self.axis
         if endpos > self.maximum:         #if endpos > max
             endpos = self.maximum
@@ -113,12 +117,18 @@ class servomotor:
         if self.cycle > endpos:
             increment = -increment
         print('increment='+str(increment))
-        while (not((self.cycle+abs(increment)-1 >= endpos) and (self.cycle-abs(increment)+1<=endpos))):
+        while (not((self.cycle+abs(increment)-1 >= endpos) and (self.cycle-abs(increment)+1<=endpos)) and self.run == True):
             #print("work")
             self.cycle += increment
             GPIO.hardware_PWM(self.pin_out, self.frequency, int(self.cycle))
             time.sleep(0.02)
+        if(self.run == True):
+            self.cycle = endpos
+            GPIO.hardware_PWM(self.pin_out, self.frequency, int(self.cycle))
+            time.sleep(0.02)
         self.stopMotion()
+        self.run = False
+        self.free_for_orders = True
         print("motor" + str(self.pin_out) + " got to position" + str(self.cycle))
 
 
