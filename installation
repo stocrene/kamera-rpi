@@ -104,5 +104,8 @@ sed -i '$a @reboot root python3 /home/pi/kamea-rpi/main.py ' /etc/crontab
 echo ----------------------------
 echo
 echo Installationsroutine beendet
-
+echo
+echo ----------------------------
+echo
+echo System wird Neugestartet
 reboot
