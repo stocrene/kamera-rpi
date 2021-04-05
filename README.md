@@ -19,3 +19,8 @@ Die Pin-Belegung für die Servomotoren ist folgende:
 - Pin9 0V 		: Motor PowerSupply (brown wire)
 - Pin32 PWM0(GPIO12) 	: Motor x-Axis PWM (orange wire)
 - Pin33 PWM1(GPIO13)	: Motor y-Axis PWM (orange wire)
+
+
+### App zur Ansteuerung: 
+
+https://github.com/stocrene/kamera-rpi-app
